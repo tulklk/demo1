@@ -1,0 +1,98 @@
+.menu {
+  display: flex;
+}
+
+.menu-sidebar {
+  width: 20%;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+}
+
+.category-list li {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.menu-content {
+  width: 80%;
+  padding: 20px;
+}
+
+.menuTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.menuList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.menuItem {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+}
+
+.menuItem img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.menuItem h3 {
+  margin: 10px 0;
+}
+
+.add-to-cart {
+  padding: 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.recently-viewed {
+  margin-top: 40px;
+}
+
+.recently-viewed-list {
+  display: flex;
+  gap: 20px;
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  text-align: center;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Light gray */
+  border-top: 8px solid #FFC0CB; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 18px;
+  color: #333;
+  margin-top: 20px;
+  font-family: 'Arial', sans-serif;
+}
