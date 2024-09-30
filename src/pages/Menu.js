@@ -1,77 +1,80 @@
-import React , {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { MenuList } from "../helpers/MenuList"; // Import danh sách các loại hoa
-import MenuItem from "../components/menucomponents/MenuItem";
 import "../styles/Menu.css";
 
 function Menu() {
-  const [loading, setLoading] = useState(true); // Thêm trạng thái loading
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // Giả lập trạng thái tải dữ liệu
     const timer = setTimeout(() => {
-      setLoading(false); // Sau 2 giây, sẽ dừng hiển thị loading
-    }, 2000); // Bạn có thể thay đổi thời gian này theo yêu cầu
+      setLoading(false);
+    }, 2000);
 
     // Cleanup timer nếu component bị unmount
     return () => clearTimeout(timer);
   }, []);
+
   if (loading) {
     return (
       <div className="loading-container">
-  <div className="spinner"></div>
-  <p className="loading-text">Đang tải dữ liệu...</p>
-</div>
-
+        <div className="spinner"></div>
+        <p className="loading-text">Đang tải dữ liệu...</p>
+      </div>
     );
   }
 
-
   return (
-    <div className="menu">
-      {/* Left Sidebar - Categories */}
-      <div className="menu-sidebar">
-        <h3>Danh Mục Hoa</h3>
+    <div className="shop-container">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <h3 className="sidebar-title">Categories</h3>
         <ul className="category-list">
-          <li>Bó Hoa</li>
-          <li>Giỏ Hoa</li>
-          <li>Hoa Baby</li>
-          <li>Hoa Chia Buồn</li>
-          <li>Hoa Hướng Dương</li>
-          <li>Hoa Khai Trương</li>
-          <li>Lan Hồ Điệp</li>
+          <li>Hoa tươi</li>
+          <li>Hoa khô</li>
+          <li>Hoa chúc mừng</li>
+          <li>Hoa cưới</li>
+          <li>Hoa sinh nhật</li>
         </ul>
       </div>
 
-      {/* Main Menu Content */}
-      <div className="menu-content">
-        <h1 className="menuTitle">Các Sản Phẩm Hoa Đang Bán</h1>
-        <div className="menuList">
-          {/* Hiển thị danh sách hoa */}
-          {MenuList.map((menuItem, key) => {
-            return (
-              <MenuItem
-                key={key}
-                image={menuItem.image}
-                name={menuItem.name}
-                price={menuItem.price}
-              />
-            );
-          })}
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Top Bar with Filters */}
+        <div className="topbar">
+          <div className="categories">Tất cả Hoa</div>
+          <div className="dropdown">
+            <button className="dropbtn">Featured</button>
+          </div>
         </div>
 
-        {/* Recently Viewed Section */}
-        <div className="recently-viewed">
-          <h2>Sản Phẩm Vừa Xem</h2>
-          <div className="recently-viewed-list">
-            {/* Hiển thị các sản phẩm vừa xem */}
-            {MenuList.slice(0, 4).map((menuItem, key) => (
-              <MenuItem
-                key={key}
-                image={menuItem.image}
-                name={menuItem.name}
-                price={menuItem.price}
-              />
-            ))}
-          </div>
+        {/* Post Grid */}
+        <div className="post-grid">
+          {MenuList.map((item, index) => (
+            <div className="post-card" key={index}>
+              <div className="post-image-container">
+                <img src={item.image} alt={item.name} className="post-image" />
+              </div>
+              <div className="post-info">
+                <h4>{item.name}</h4>
+                <p>M/L/XL</p>
+                <div className="rating">⭐⭐⭐⭐⭐</div>
+                <div className="price">${item.price}</div>
+                <div className="action-buttons">
+                  <button className="action-button">❤️</button>
+                  <button className="action-button">👁️</button>
+                  <button className="action-button">🛒</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination">
+          <a href="#">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
         </div>
       </div>
     </div>

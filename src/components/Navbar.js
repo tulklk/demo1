@@ -17,18 +17,27 @@ function Navbar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [user, setUser] = useState(null); // Store user info
+  const [cartCount, setCartCount] = useState(0); // Cart items count
   const navigate = useNavigate();
 
+  // Fetch user data and cart data from localStorage after login
   useEffect(() => {
-    const email = localStorage.getItem('userEmail');
-    if (email) {
-      // Fetch user data from local storage (you could use an API call instead)
-      const userInfo = {
-        email,
-        username: '', // Dummy name, in real case fetch from API
-      };
-      setUser(userInfo);
+    const storedUser = localStorage.getItem('user');
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || []; // Get cart from localStorage
+
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser); // Safely parse JSON
+        setUser(parsedUser); // Set the parsed user data
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        // Clear localStorage if invalid data is stored
+        localStorage.removeItem('user');
+      }
     }
+
+    // Update cart count if items are present in the cart
+    setCartCount(storedCart.length);
   }, []);
 
   const toggleSearchBar = () => {
@@ -57,7 +66,7 @@ function Navbar() {
   const handleLogout = () => {
     // Clear user session
     localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
+    localStorage.removeItem('user');
     localStorage.removeItem('userRole');
     setUser(null); // Remove user data from state
     navigate("/login"); // Redirect to login page
@@ -72,11 +81,10 @@ function Navbar() {
       <div className="navbar-center">
         <NavLink exact to="/" className="nav-link" activeClassName="activeLink">Home</NavLink>
         <NavLink to="/about" className="nav-link" activeClassName="activeLink">About</NavLink>
-        <NavLink to="/menu" className="nav-link" activeClassName="activeLink">Product</NavLink>
+        <NavLink to="/menu" className="nav-link" activeClassName="activeLink">Postings</NavLink>
         <NavLink to="/contact" className="nav-link" activeClassName="activeLink">Contact</NavLink>
         <NavLink to="/blog" className="nav-link" activeClassName="activeLink">Blog</NavLink>
         <NavLink to="/cart" className="nav-link" activeClassName="activeLink">Cart</NavLink>
-        <NavLink to="/profile-page" className="nav-link" activeClassName="activeLink">Test</NavLink>
       </div>
 
       <div className="navbar-right">
@@ -106,7 +114,7 @@ function Navbar() {
 
         {user ? (
           <>
-            <span className="navbar-user">Welcome, {user.name}</span>
+            <span className="navbar-user">Welcome, {user.username || user.name || 'User'}</span>
             <Link to="/profile-page">
               <FaUser className="navbar-icon" />
             </Link>
@@ -120,7 +128,7 @@ function Navbar() {
 
         <div className="cart-icon-wrapper">
           <FaShoppingBag className="navbar-icon" />
-          <span className="cart-count">0</span>
+          <span className="cart-count">{cartCount}</span>
         </div>
       </div>
     </nav>

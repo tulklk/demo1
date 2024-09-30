@@ -27,33 +27,38 @@ const Login = () => {
   }, []);
   
 
+const handleLogin = async (e) => {
+  e.preventDefault(); // Ngăn chặn reload trang khi submit form
 
+  const loginValues = { email, password };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  try {
+    const response = await api.post('http://localhost:8080/identity/users/login', loginValues);
+    console.log('Response:', response.data);
 
-    try {
-        // Gửi thông tin đăng nhập đến Spring Boot server
-        const response = await api.post("https://reqres.in/api/login", {
-            email: email,
-            password: password
-        });
+    // Kiểm tra xem result có hợp lệ không (không null)
+    if (response.data && response.data.result) {
+      console.log('Đăng nhập thành công:', response.data.result);
+      
+      // Lưu thông tin người dùng vào localStorage
+      localStorage.setItem('user', JSON.stringify(response.data.result));
 
-        
-
-        // Lấy user-info và lưu vào localStorage
-        const { userInfo } = response.data; // Assume the response contains an object called userInfo
-        localStorage.setItem("user-info", JSON.stringify(userInfo)); // Save the user-info as a string
-
-        // Điều hướng đến trang chủ sau khi đăng nhập thành công
-        navigate("/");
-
-    } catch (error) {
-        console.error("Login error: ", error);
-        // Hiển thị thông báo lỗi
-        setError('Invalid email or password. Please try again.');
+      // Điều hướng người dùng sau khi đăng nhập thành công
+      navigate('/');
+      // Reload the page to ensure user data is loaded properly
+      window.location.reload();
+    } else {
+      // Nếu result là null hoặc không tồn tại, hiển thị lỗi
+      setError("Tài khoản hoặc mật khẩu sai"); 
     }
+
+  } catch (error) {
+    // Cập nhật thông báo lỗi trong trường hợp yêu cầu thất bại
+    setError("Tài khoản hoặc mật khẩu sai");
+  }
 };
+
+
 
 
 
@@ -94,7 +99,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
         <h2>Sign in</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="form-field">
             <input
               className="form-input"
